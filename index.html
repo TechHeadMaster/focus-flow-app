@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-theme="sage">
+    <div class="container">
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand">
+                    <span class="brand-icon">🍃</span>
+                    <h1>Focus Flow</h1>
+                </div>
+                <div class="header-info">
+                    <span class="date">Thursday, August 14, 2025</span>
+                    <div class="background-status" id="backgroundStatus">
+                        <span class="status-indicator" id="statusIndicator">🌱 Ready to Flow</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="theme-selector">
+                    <label class="form-label">Theme:</label>
+                    <select class="form-control" id="themeSelector">
+                        <option value="sage">Sage Green</option>
+                        <option value="olive">Warm Olive</option>
+                        <option value="beige">Soft Beige</option>
+                        <option value="blue">Muted Blue</option>
+                        <option value="purple">Gentle Purple</option>
+                        <option value="gray">Warm Gray</option>
+                    </select>
+                </div>
+                <button class="btn btn--secondary btn--sm" id="settingsBtn">⚙️ Settings</button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <!-- Active Session Panel -->
+            <section class="active-session-panel card">
+                <div class="panel-header">
+                    <h2>Active Session</h2>
+                    <div class="session-indicator">
+                        <span id="sessionCounter">Ready to Flow</span>
+                    </div>
+                </div>
+                
+                <div class="session-content">
+                    <div class="current-task">
+                        <h3 id="currentTaskName">Select a task to begin your focused study session</h3>
+                        <p class="task-subject" id="currentTaskSubject">Choose from your personalized task list below</p>
+                    </div>
+                    
+                    <div class="timer-display">
+                        <div class="timer-circle">
+                            <svg class="progress-ring" width="200" height="200">
+                                <circle class="progress-ring-circle" 
+                                        stroke-width="8" 
+                                        fill="transparent" 
+                                        r="86" 
+                                        cx="100" 
+                                        cy="100"
+                                        id="progressCircle"/>
+                            </svg>
+                            <div class="timer-text" id="timerDisplay">25:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="psychology-tip" id="psychologyTipCard">
+                        <div class="tip-icon">💡</div>
+                        <p id="psychologyTip">Create your perfect study flow - edit tasks to match today's priorities!</p>
+                    </div>
+                    
+                    <div class="session-controls" id="sessionControls">
+                        <button class="btn btn--secondary" id="pauseBtn" disabled>Pause</button>
+                        <button class="btn btn--outline" id="skipBtn" disabled>Skip</button>
+                        <button class="btn btn--primary" id="completeBtn" disabled>Complete</button>
+                    </div>
+                    
+                    <div class="background-features">
+                        <div class="feature-info">
+                            <span class="feature-icon">🎯</span>
+                            <span class="feature-text">Background timer keeps flowing</span>
+                        </div>
+                        <div class="feature-info">
+                            <span class="feature-icon">📝</span>
+                            <span class="feature-text">Edit tasks on the fly</span>
+                        </div>
+                        <div class="feature-info">
+                            <span class="feature-icon">🌱</span>
+                            <span class="feature-text">Your personal focus garden</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Task List with Editing -->
+            <section class="task-list-panel card">
+                <div class="panel-header">
+                    <h2>Today's Focus Sessions</h2>
+                    <div class="task-controls">
+                        <button class="btn btn--sm btn--primary" id="addTaskBtn">+ Add Task</button>
+                        <button class="btn btn--sm btn--outline" id="resetTasksBtn">🔄 Reset</button>
+                    </div>
+                </div>
+                
+                <div class="task-list" id="taskList">
+                    <!-- Tasks will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Advanced Analytics Dashboard -->
+            <section class="analytics-dashboard card">
+                <div class="panel-header">
+                    <h2>Flow Analytics</h2>
+                    <div class="analytics-controls">
+                        <button class="btn btn--sm btn--outline" id="analyticsToggle">Show Details</button>
+                    </div>
+                </div>
+                
+                <div class="analytics-overview">
+                    <div class="metric-cards">
+                        <div class="metric-card">
+                            <h4>Focus Quality</h4>
+                            <div class="metric-value" id="avgFocusScore">-</div>
+                            <div class="metric-label">Average Rating</div>
+                            <div class="metric-trend" id="focusTrend">🌱 Growing</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <h4>Completion Rate</h4>
+                            <div class="metric-value" id="completionRate">0%</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar" id="completionProgressBar"></div>
+                            </div>
+                            <div class="metric-label">Today's Flow</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <h4>Flow Streak</h4>
+                            <div class="metric-value" id="studyStreak">1</div>
+                            <div class="metric-label">Days</div>
+                            <div class="streak-indicator" id="streakIndicator">🔥 Keep flowing!</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <h4>Peak Flow</h4>
+                            <div class="metric-value" id="peakWindow">Morning</div>
+                            <div class="metric-label">Best Performance</div>
+                            <div class="energy-indicators" id="energyIndicators">
+                                <span class="energy-dot active"></span>
+                                <span class="energy-dot active"></span>
+                                <span class="energy-dot active"></span>
+                                <span class="energy-dot"></span>
+                                <span class="energy-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-detailed hidden" id="analyticsDetailed">
+                    <div class="charts-section">
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <h4>Subject Performance Distribution</h4>
+                            <canvas id="subjectChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <h4>Focus Flow Trend</h4>
+                            <canvas id="focusChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="insights-section">
+                        <h4>Flow Insights</h4>
+                        <div class="insights-list" id="insightsList">
+                            <div class="insight-item">
+                                <span class="insight-icon">🌱</span>
+                                <span class="insight-text">Your focus flows strongest during morning sessions</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">📚</span>
+                                <span class="insight-text">Physics sessions show consistent high performance</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">⏰</span>
+                                <span class="insight-text">25-minute sessions maintain your optimal flow state</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Duration Selection Modal -->
+        <div class="modal hidden" id="durationModal">
+            <div class="modal-overlay" id="durationModalOverlay"></div>
+            <div class="modal-content">
+                <h3>Select Session Duration</h3>
+                <p id="selectedTaskName">Task name will appear here</p>
+                
+                <div class="duration-options">
+                    <div class="duration-option" data-duration="25">
+                        <div class="duration-time">25 min</div>
+                        <div class="duration-label">Quick Flow</div>
+                        <div class="duration-desc">Perfect for review and practice</div>
+                    </div>
+                    <div class="duration-option" data-duration="60">
+                        <div class="duration-time">60 min</div>
+                        <div class="duration-label">Deep Flow</div>
+                        <div class="duration-desc">Ideal for complex problem solving</div>
+                    </div>
+                    <div class="duration-option" data-duration="90">
+                        <div class="duration-time">90 min</div>
+                        <div class="duration-label">Extended Flow</div>
+                        <div class="duration-desc">For comprehensive learning</div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn--primary" id="confirmDurationBtn" disabled>Start Session</button>
+                    <button class="btn btn--secondary" id="cancelDurationBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Edit Modal -->
+        <div class="modal hidden" id="taskEditModal">
+            <div class="modal-overlay" id="taskEditModalOverlay"></div>
+            <div class="modal-content">
+                <h3 id="editModalTitle">Edit Task</h3>
+                
+                <form id="taskEditForm" class="task-edit-form">
+                    <div class="form-group">
+                        <label class="form-label">Task Name</label>
+                        <input type="text" class="form-control" id="editTaskName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-control" id="editTaskSubject" required>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Biology">Biology</option>
+                            <option value="IOQM">IOQM</option>
+                            <option value="Integration">Integration</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Difficulty</label>
+                        <select class="form-control" id="editTaskDifficulty" required>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Recommended Duration (minutes)</label>
+                        <select class="form-control" id="editTaskDuration" required>
+                            <option value="25">25 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">60 minutes</option>
+                            <option value="90">90 minutes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Psychology Tip</label>
+                        <textarea class="form-control" id="editTaskTip" rows="3" placeholder="Add a motivational tip for this task..."></textarea>
+                    </div>
+                </form>
+                
+                <div class="modal-actions">
+                    <button class="btn btn--primary" id="saveTaskBtn">Save Changes</button>
+                    <button class="btn btn--secondary" id="cancelEditBtn">Cancel</button>
+                    <button class="btn btn--outline delete-btn" id="deleteTaskBtn">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Completion Modal -->
+        <div class="modal hidden" id="sessionModal">
+            <div class="modal-overlay" id="modalOverlay"></div>
+            <div class="modal-content">
+                <h3>🌟 Flow Complete!</h3>
+                <p id="completedTaskName">Task completed successfully</p>
+                
+                <div class="focus-rating">
+                    <label>How was your flow during this session? (1-10):</label>
+                    <div class="rating-slider">
+                        <input type="range" min="1" max="10" value="8" id="focusSlider" class="slider">
+                        <div class="slider-labels">
+                            <span>Scattered</span>
+                            <span id="sliderValue">8</span>
+                            <span>Perfect Flow</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="session-notes">
+                    <label for="sessionNotes">Flow Notes (optional):</label>
+                    <textarea id="sessionNotes" placeholder="Any insights, breakthroughs, or observations..."></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn--primary" id="saveSessionBtn">Save & Continue</button>
+                    <button class="btn btn--secondary" id="skipRatingBtn">Skip Rating</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal hidden" id="settingsModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h3>Focus Flow Settings</h3>
+                
+                <div class="settings-form">
+                    <div class="settings-section">
+                        <h4>Notifications</h4>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="soundNotifications" checked> 
+                                Enable Audio Notifications
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="desktopNotifications" checked> 
+                                Enable Desktop Notifications
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h4>Break Settings</h4>
+                        <div class="form-group">
+                            <label class="form-label">Short Break Duration</label>
+                            <select class="form-control" id="shortBreakDuration">
+                                <option value="5">5 minutes</option>
+                                <option value="10">10 minutes</option>
+                                <option value="15">15 minutes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Long Break Duration</label>
+                            <select class="form-control" id="longBreakDuration">
+                                <option value="15">15 minutes</option>
+                                <option value="20">20 minutes</option>
+                                <option value="30">30 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn--primary" id="saveSettingsBtn">Save Settings</button>
+                    <button class="btn btn--secondary" id="closeSettingsBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- End of Day Report Modal -->
+        <div class="modal hidden" id="endOfDayModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content large">
+                <h3>🌟 Daily Flow Report</h3>
+                
+                <div class="report-sections">
+                    <div class="report-summary">
+                        <h4>Flow Summary</h4>
+                        <div class="summary-stats">
+                            <div class="stat">
+                                <span class="stat-label">Sessions Completed:</span>
+                                <span class="stat-value" id="reportCompletedTasks">0/8</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Average Flow:</span>
+                                <span class="stat-value" id="reportAvgFocus">-</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Total Focus Time:</span>
+                                <span class="stat-value" id="reportStudyTime">0h 0m</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Best Subject:</span>
+                                <span class="stat-value" id="reportBestSubject">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="report-achievements">
+                        <h4>🏆 Flow Achievements</h4>
+                        <div class="achievements-list" id="achievementsList">
+                            <!-- Achievements will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="report-recommendations">
+                        <h4>💡 Tomorrow's Flow Guide</h4>
+                        <ul id="recommendationsList">
+                            <li>Continue with your current flow rhythm</li>
+                            <li>Focus extra attention on challenging topics</li>
+                            <li>Maintain consistent break intervals</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn--primary" id="closeReportBtn">Close Report</button>
+                    <button class="btn btn--secondary" id="shareReportBtn">Share Progress</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
